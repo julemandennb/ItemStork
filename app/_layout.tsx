@@ -4,7 +4,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
-import { PaperProvider } from 'react-native-paper';
+import { PaperProvider,MD2LightTheme } from 'react-native-paper';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 
@@ -27,8 +27,25 @@ export default function RootLayout() {
     return null;
   }
 
+
+  const theme = {
+    ...MD2LightTheme,
+
+    // Specify a custom property
+    custom: 'property',
+
+    // Specify a custom nested property
+    colors: {
+      ...MD2LightTheme.colors,
+      primary: colorScheme === 'dark' ? DarkTheme.colors.primary : DefaultTheme.colors.primary,
+    },
+  };
+
+
+
+
   return (
-    <PaperProvider>
+    <PaperProvider theme={theme}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />

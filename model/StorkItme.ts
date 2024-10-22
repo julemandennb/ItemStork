@@ -1,3 +1,6 @@
+/**
+ * obj hold info on itme in stork
+ */
 export default class StorkItme{
 
     id:number
@@ -22,8 +25,6 @@ export default class StorkItme{
         const month = String(this.date.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
         const year = this.date.getFullYear().toString().slice(-2);
         return `${day}/${month} ${year}`;
-
-        return "";
     }
 
 
