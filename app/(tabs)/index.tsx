@@ -91,7 +91,7 @@ export default function HomeScreen() {
 
         {newStorkItme.btn()}
 
-        <View>
+        
           <DataTable>
 
             <DataTable.Header>
@@ -127,18 +127,18 @@ export default function HomeScreen() {
               page={page}
               numberOfPages={Math.ceil(items.length / itemsPerPage)}
               onPageChange={(page) => setPage(page)}
-              label={`${from + 1}-${to} of ${items.length}`}
+              label={<Text style={{color:textColor}}>{from + 1}-{to} of {items.length}</Text> }
               numberOfItemsPerPageList={numberOfItemsPerPageList}
               numberOfItemsPerPage={itemsPerPage}
               onItemsPerPageChange={onItemsPerPageChange}
               showFastPaginationControls
-              selectPageDropdownLabel={'Rows per page'}
+              selectPageDropdownLabel={<Text style={{color:textColor}}>Rows per page</Text>}
             />
 
 
           </DataTable>
 
-        </View>
+        
 
         {newStorkItme.btn()}
 
