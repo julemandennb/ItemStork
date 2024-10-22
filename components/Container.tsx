@@ -13,8 +13,7 @@ export default function Container({ children }: PropsWithChildren)
 
 const style = StyleSheet.create({
     container:{
-        marginTop: 10,
-        marginLeft:10
+        margin:10
 
     }
     
