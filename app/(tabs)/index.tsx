@@ -133,6 +133,15 @@ export default function HomeScreen() {
               onItemsPerPageChange={onItemsPerPageChange}
               showFastPaginationControls
               selectPageDropdownLabel={<Text style={{color:textColor}}>Rows per page</Text>}
+              theme={{
+                colors: {
+                  text: '#616161',
+                  onSurface: '#616161',
+                  elevation: { level2: '#000' },
+                },
+              }}
+              
+              
             />
 
 
