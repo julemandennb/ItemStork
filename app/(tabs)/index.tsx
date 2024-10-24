@@ -21,7 +21,7 @@ export default function HomeScreen() {
     numberOfItemsPerPageList[0]
   );
 
-  const [items, setItme] = React.useState([
+  const [storkItmes, setStorkItme] = React.useState([
     new StorkItme(1,"test",5,new Date(2025,5,10),""),
     new StorkItme(2,"test",5,new Date(2025,5,10),""),
     new StorkItme(3,"test",5,new Date(2025,5,10),""),
@@ -32,57 +32,15 @@ export default function HomeScreen() {
     new StorkItme(8,"test",5,new Date(2025,5,10),""),
     new StorkItme(9,"test",5,new Date(2025,5,10),""),
     new StorkItme(10,"test",5,new Date(2025,5,10),""),
-    new StorkItme(11,"test",5,new Date(2025,5,10),""),
-    new StorkItme(12,"test",5,new Date(2025,5,10),""),
-    new StorkItme(13,"test",5,new Date(2025,5,10),""),
-    new StorkItme(14,"test",5,new Date(2025,5,10),""),
-    new StorkItme(15,"test",5,new Date(2025,5,10),""),
-    new StorkItme(16,"test",5,new Date(2025,5,10),""),
-    new StorkItme(17,"test",5,new Date(2025,5,10),""),
-    new StorkItme(18,"test",5,new Date(2025,5,10),""),
-    new StorkItme(19,"test",5,new Date(2025,5,10),""),
-    new StorkItme(20,"test",5,new Date(2025,5,10),""),
-    new StorkItme(21,"test",5,new Date(2025,5,10),""),
-    new StorkItme(22,"test",5,new Date(2025,5,10),""),
-    new StorkItme(23,"test",5,new Date(2025,5,10),""),
-    new StorkItme(24,"test",5,new Date(2025,5,10),""),
-    new StorkItme(25,"test",5,new Date(2025,5,10),""),
-    new StorkItme(26,"test",5,new Date(2025,5,10),""),
-    new StorkItme(27,"test",5,new Date(2025,5,10),""),
-    new StorkItme(28,"test",5,new Date(2025,5,10),""),
 
-    new StorkItme(29,"test",5,new Date(2025,5,10),""),
-    new StorkItme(30,"test",5,new Date(2025,5,10),""),
-     new StorkItme(31,"test",5,new Date(2025,5,10),""),
-    new StorkItme(32,"test",5,new Date(2025,5,10),""),
-    new StorkItme(33,"test",5,new Date(2025,5,10),""),
-    new StorkItme(34,"test",5,new Date(2025,5,10),""),
-    new StorkItme(35,"test",5,new Date(2025,5,10),""),
-    new StorkItme(36,"test",5,new Date(2025,5,10),""),
-    new StorkItme(37,"test",5,new Date(2025,5,10),""),
-    new StorkItme(38,"test",5,new Date(2025,5,10),""),
-    new StorkItme(39,"test",5,new Date(2025,5,10),""),
-    new StorkItme(40,"test",5,new Date(2025,5,10),""),
-    new StorkItme(41,"test",5,new Date(2025,5,10),""),
-    new StorkItme(42,"test",5,new Date(2025,5,10),""),
-    new StorkItme(43,"test",5,new Date(2025,5,10),""),
-    new StorkItme(44,"test",5,new Date(2025,5,10),""),
-    new StorkItme(45,"test",5,new Date(2025,5,10),""),
-    new StorkItme(46,"test",5,new Date(2025,5,10),""),
-    new StorkItme(47,"test",5,new Date(2025,5,10),""),
-    new StorkItme(48,"test",5,new Date(2025,5,10),""),
-    new StorkItme(49,"test",5,new Date(2025,5,10),""),
-    new StorkItme(50,"test",5,new Date(2025,5,10),""),
-    new StorkItme(51,"test",5,new Date(2025,5,10),""),
-    new StorkItme(52,"test",5,new Date(2025,5,10),""),
-    new StorkItme(53,"test",5,new Date(2025,5,10),""),
-    new StorkItme(54,"test",5,new Date(2025,5,10),""),
-    new StorkItme(55,"test",5,new Date(2025,5,10),""),
-    new StorkItme(56,"test",5,new Date(2025,5,10),""),
   ])
 
+  const pushStorkItmes = (itme:StorkItme) =>{
+    setStorkItme(oldlist => [...oldlist,itme ])
+  }
+
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, items.length);
+  const to = Math.min((page + 1) * itemsPerPage, storkItmes.length);
 
   const newStorkItme = NewStorkItme()
 
@@ -104,7 +62,7 @@ export default function HomeScreen() {
 
 
 
-            {items.slice(from, to).map((item) => (
+            {storkItmes.slice(from, to).map((item) => (
               <DataTable.Row key={item.id} >
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.name}</DataTable.Cell>
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.stork}</DataTable.Cell>
@@ -125,9 +83,9 @@ export default function HomeScreen() {
 
             <DataTable.Pagination
               page={page}
-              numberOfPages={Math.ceil(items.length / itemsPerPage)}
+              numberOfPages={Math.ceil(storkItmes.length / itemsPerPage)}
               onPageChange={(page) => setPage(page)}
-              label={<Text style={{color:textColor}}>{from + 1}-{to} of {items.length}</Text> }
+              label={<Text style={{color:textColor}}>{from + 1}-{to} of {storkItmes.length}</Text> }
               numberOfItemsPerPageList={numberOfItemsPerPageList}
               numberOfItemsPerPage={itemsPerPage}
               onItemsPerPageChange={onItemsPerPageChange}
@@ -140,7 +98,7 @@ export default function HomeScreen() {
                   elevation: { level2: '#000' },
                 },
               }}
-              
+
               
             />
 
@@ -151,7 +109,7 @@ export default function HomeScreen() {
 
         {newStorkItme.btn()}
 
-        {newStorkItme.ModalFrom()}
+        {newStorkItme.ModalFrom(pushStorkItmes)}
 
       </Container>
   );

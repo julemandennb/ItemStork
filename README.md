@@ -62,3 +62,7 @@ To learn more about developing your project with Expo, look at the following res
 ## components lib
 
 -[react-native-paper](https://callstack.github.io/react-native-paper/docs/components/ActivityIndicator) 
+
+## components
+
+-[DateTimePicker](https://github.com/farhoudshapouran/react-native-ui-datepicker?tab=readme-ov-file)
