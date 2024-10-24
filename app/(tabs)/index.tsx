@@ -5,9 +5,8 @@ import { Button, DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-pa
 
 import Container from '@/components/Container'
 import StorkItme from '@/model/StorkItme';
-import NewStorkItme from "@/components/AddNewStorkItme"
-
-import { Colors } from 'react-native/Libraries/NewAppScreen';
+import AddNewStorkItmeView from "@/components/AddNewStorkItmeView"
+import StorkItmeServices from "@/services/StorkItmeServices"
 
 export default function HomeScreen() {
 
@@ -21,28 +20,22 @@ export default function HomeScreen() {
     numberOfItemsPerPageList[0]
   );
 
-  const [storkItmes, setStorkItme] = React.useState([
-    new StorkItme(1,"test",5,new Date(2025,5,10),""),
-    new StorkItme(2,"test",5,new Date(2025,5,10),""),
-    new StorkItme(3,"test",5,new Date(2025,5,10),""),
-    new StorkItme(4,"test",5,new Date(2025,5,10),""),
-    new StorkItme(5,"test",5,new Date(2025,5,10),""),
-    new StorkItme(6,"test",5,new Date(2025,5,10),""),
-    new StorkItme(7,"test",5,new Date(2025,5,10),""),
-    new StorkItme(8,"test",5,new Date(2025,5,10),""),
-    new StorkItme(9,"test",5,new Date(2025,5,10),""),
-    new StorkItme(10,"test",5,new Date(2025,5,10),""),
 
-  ])
+  const storkItmeServices = React.useRef(new StorkItmeServices()).current;
+  const [storkItems, setStorkItems] = React.useState<StorkItme[]>(storkItmeServices.GetStorkItmes());
 
-  const pushStorkItmes = (itme:StorkItme) =>{
-    setStorkItme(oldlist => [...oldlist,itme ])
-  }
+  React.useEffect(() => {
+    // Register the callback to update the state when new items are added
+    storkItmeServices.onUpdate((updatedItems: StorkItme[]) => {
+      setStorkItems([...updatedItems]); // Update the React state
+    });
+  }, [storkItmeServices]);
+
 
   const from = page * itemsPerPage;
-  const to = Math.min((page + 1) * itemsPerPage, storkItmes.length);
+  const to = Math.min((page + 1) * itemsPerPage, storkItems.length);
 
-  const newStorkItme = NewStorkItme()
+  const newStorkItme = AddNewStorkItmeView(storkItmeServices)
 
   return (
       <Container>
@@ -62,7 +55,7 @@ export default function HomeScreen() {
 
 
 
-            {storkItmes.slice(from, to).map((item) => (
+            {storkItems.slice(from, to).map((item) => (
               <DataTable.Row key={item.id} >
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.name}</DataTable.Cell>
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.stork}</DataTable.Cell>
@@ -72,7 +65,7 @@ export default function HomeScreen() {
                     <Icon source="pen" color={MD3Colors.primary50} size={20}/>
                 </DataTable.Cell>
 
-                <DataTable.Cell onPress={() => console.log('Delete')} style={styles.DataTableCenterCell}>
+                <DataTable.Cell onPress={() => storkItmeServices.remove(item.id)} style={styles.DataTableCenterCell}>
                     <Icon source="delete" color={MD3Colors.error50} size={20}/>
                 </DataTable.Cell>
 
@@ -83,9 +76,9 @@ export default function HomeScreen() {
 
             <DataTable.Pagination
               page={page}
-              numberOfPages={Math.ceil(storkItmes.length / itemsPerPage)}
+              numberOfPages={Math.ceil(storkItems.length / itemsPerPage)}
               onPageChange={(page) => setPage(page)}
-              label={<Text style={{color:textColor}}>{from + 1}-{to} of {storkItmes.length}</Text> }
+              label={<Text style={{color:textColor}}>{from + 1}-{to} of {storkItems.length}</Text> }
               numberOfItemsPerPageList={numberOfItemsPerPageList}
               numberOfItemsPerPage={itemsPerPage}
               onItemsPerPageChange={onItemsPerPageChange}
@@ -109,7 +102,7 @@ export default function HomeScreen() {
 
         {newStorkItme.btn()}
 
-        {newStorkItme.ModalFrom(pushStorkItmes)}
+        {newStorkItme.ModalFrom()}
 
       </Container>
   );

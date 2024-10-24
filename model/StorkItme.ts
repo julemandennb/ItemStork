@@ -9,6 +9,7 @@ export default class StorkItme{
     date:Date
     imgurl:string
 
+    
     constructor(id:number,name: string, stork: number,date:Date,imgurl:string)
     {
         this.id = id;

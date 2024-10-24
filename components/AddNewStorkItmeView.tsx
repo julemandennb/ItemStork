@@ -4,10 +4,11 @@ import { View  } from 'react-native';
 import { Button, Text,Portal,Modal,TextInput  } from 'react-native-paper';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import StorkItme from '@/model/StorkItme';
-
 import DateTimePicker from 'react-native-ui-datepicker';
 
-export default function NewStockItem() {
+import StorkItmeServices from "@/services/StorkItmeServices"
+
+export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices) {
 
     //#region to show popup box
     const [visible, setVisible] = React.useState<boolean>(false);
@@ -56,31 +57,27 @@ export default function NewStockItem() {
      */
     const DateTimePickerView = () => {
 
-            return(
+        return(
 
-                <Portal>
-                    <Modal visible={showDateTimePicker} onDismiss={() => {setShowDateTimePicker(false); console.log(54654654)}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
+            <Portal>
+                <Modal visible={showDateTimePicker} onDismiss={() => {setShowDateTimePicker(false); console.log(54654654)}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
 
-                        <View>
+                    <View>
 
-                            <DateTimePicker
-                                mode="single"
-                                date={date}
-                                onChange={(params) =>setDate(new Date(params.date))}
-                            />
+                        <DateTimePicker
+                            mode="single"
+                            date={date}
+                            onChange={(params) =>setDate(new Date(params.date))}
+                        />
 
-                            <Button icon="plus" mode="contained" onPress={() => setShowDateTimePicker(false)} style={{color:textColor}}>
-                                Done
-                            </Button>
+                        <Button icon="plus" mode="contained" onPress={() => setShowDateTimePicker(false)} style={{color:textColor}}>
+                            Done
+                        </Button>
 
-
-                        </View>
-                    </Modal>
-                </Portal>
-            )
-
-
-
+                    </View>
+                </Modal>
+            </Portal>
+        )
     }
 
 
@@ -100,16 +97,18 @@ export default function NewStockItem() {
         )
     }
 
-
-
-    const ModalFrom = (pushStorkItmes:(itme:StorkItme) => void) =>
+    /**
+     * make popup to make a new StorkItme
+     * @param pushStorkItmes fun to send new StorkItme to 
+     * @returns popup to make a popup
+     */
+    const ModalFrom = () =>
     {
-
 
         return(
 
             <Portal>
-                <Modal visible={visible} onDismiss={() => {setVisible(false); console.log(54654654)}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
+                <Modal visible={visible} onDismiss={() => {setVisible(false);}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
                     <Text style={{color:textColor}}>Example Modal.  Click outside this area to dismiss.</Text>
 
                     <TextInput
@@ -128,15 +127,13 @@ export default function NewStockItem() {
                         value={stock.toString()}
                     />
 
-                       
-
                     {DateTimePickerView()}
 
                     <Button mode="elevated" onPress={() =>  setShowDateTimePicker(true)} style={{textAlign: 'left',padding: '0', display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                         <Text style={{color:textColor}}>date {date.toLocaleString("da").split(",")[0]} </Text>
                     </Button>
 
-                    <Button icon="plus" mode="contained" onPress={() => console.log("gg")} style={{color:textColor}}>
+                    <Button icon="plus" mode="contained" onPress={() => callMakeStorkItme()} style={{color:textColor}}>
                         Save
                     </Button>
 
@@ -148,6 +145,11 @@ export default function NewStockItem() {
 
     }
 
+    const callMakeStorkItme = () =>
+    {
+        storkItmeServices.create(text,stock,date)
+        setVisible(false);
+    }
 
     return {btn,ModalFrom}
 
