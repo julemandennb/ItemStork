@@ -61,6 +61,15 @@ const  App = () => {
         }
     };
 
+    const handleLogud = async(id:string) =>{
+
+       let idSaveOnStorage = getRightLoginServices.apiUrls.find(x => x.idSaveOnStorage == id)
+
+       if (idSaveOnStorage != undefined)
+        getRightLoginServices.Logud(idSaveOnStorage)
+
+    }
+
   return (
     <View style={styles.container}>
         <Text style={styles.title}>Login</Text>
@@ -98,50 +107,48 @@ const  App = () => {
         <View>
 
 
-    <DataTable>
+            <DataTable>
 
-        <DataTable.Header>
-            <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}>Name</DataTable.Title>
-            <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}></DataTable.Title>
-        
-        </DataTable.Header>
-
-
-
-        {LoginList.slice(from, to).map((item) => (
-        <DataTable.Row key={item.id} >
-            <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.name}</DataTable.Cell>
-            <DataTable.Cell onPress={() => console.log('log ud')} style={styles.DataTableCenterCell}>
-                <Text style={{color:MD3Colors.error50}}>log ud</Text>
-
-            </DataTable.Cell>
-        </DataTable.Row>
-        ))}
+                <DataTable.Header>
+                    <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}>Name</DataTable.Title>
+                    <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}></DataTable.Title>
+                
+                </DataTable.Header>
 
 
-        <DataTable.Pagination
-        page={page}
-        numberOfPages={Math.ceil(LoginList.length / itemsPerPage)}
-        onPageChange={(page) => setPage(page)}
-        label={<Text style={{color:textColor}}>{from + 1}-{to} of {LoginList.length}</Text> }
-        numberOfItemsPerPageList={numberOfItemsPerPageList}
-        numberOfItemsPerPage={itemsPerPage}
-        onItemsPerPageChange={onItemsPerPageChange}
-        showFastPaginationControls
-        selectPageDropdownLabel={<Text style={{color:textColor}}>Rows per page</Text>}
-        theme={{
-            colors: {
-            text: '#616161',
-            onSurface: '#616161',
-            elevation: { level2: '#000' },
-            },
-        }}
 
-        
-        />
+                {LoginList.slice(from, to).map((item) => (
+                    <DataTable.Row key={item.id} >
+                        <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.name}</DataTable.Cell>
+                        <DataTable.Cell onPress={() => handleLogud(item.id)} style={styles.DataTableCenterCell}>
+                            <Text style={{color:MD3Colors.error50}}>log ud</Text>
+
+                        </DataTable.Cell>
+                    </DataTable.Row>
+                ))}
 
 
-    </DataTable>
+                <DataTable.Pagination
+                    page={page}
+                    numberOfPages={Math.ceil(LoginList.length / itemsPerPage)}
+                    onPageChange={(page) => setPage(page)}
+                    label={<Text style={{color:textColor}}>{from + 1}-{to} of {LoginList.length}</Text> }
+                    numberOfItemsPerPageList={numberOfItemsPerPageList}
+                    numberOfItemsPerPage={itemsPerPage}
+                    onItemsPerPageChange={onItemsPerPageChange}
+                    showFastPaginationControls
+                    selectPageDropdownLabel={<Text style={{color:textColor}}>Rows per page</Text>}
+                    theme={{
+                        colors: {
+                        text: '#616161',
+                        onSurface: '#616161',
+                        elevation: { level2: '#000' },
+                        },
+                    }}
+                />
+
+
+            </DataTable>
 
 
 

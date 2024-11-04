@@ -54,6 +54,30 @@ export default class GetRightServices{
         return returnInfoFromWebServer;
     }
 
+    public async Logud(apiUrl:PublicUrlServer)
+    {
+
+        let error = false
+
+        switch(apiUrl.serverToUser)
+        {
+            case "api":
+                    error = await new ApiServices().Logud(apiUrl)
+                break;
+            case "local":
+                return new ReturnInfoFromWebServer("local",true);
+            default:
+                return new ReturnInfoFromWebServer("cannot find Services",true);
+        }
+
+        if(error)
+            return "cannot Logud " +apiUrl.displayName;
+        else
+            this.RemoveLoginList(apiUrl)
+
+        return "Logud " + apiUrl.displayName;
+    }
+
 
     public async GetLoginList()
     {
@@ -80,6 +104,22 @@ export default class GetRightServices{
         loginInfos.push(loginIfo)
 
         await AsyncStorage.setItem(this.LoginListName, JSON.stringify(loginInfos))
+    }
+
+    private async RemoveLoginList(apiUrl:PublicUrlServer)
+    {
+        let loginInfos:LoginList[] = [];
+
+        let loginInfosJsonStr = await AsyncStorage.getItem(this.LoginListName)
+        if(loginInfosJsonStr != null)
+        {
+            loginInfos =  JSON.parse(loginInfosJsonStr);
+
+            loginInfos = loginInfos.filter(x => x.id != apiUrl.idSaveOnStorage)
+        }
+
+        await AsyncStorage.setItem(this.LoginListName, JSON.stringify(loginInfos))
+
     }
     
 

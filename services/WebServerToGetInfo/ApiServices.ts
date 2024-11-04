@@ -45,6 +45,21 @@ export default class ApiServices{
         }
     }
 
+    public async Logud(publicUrlServer:PublicUrlServer)
+    {
+        try
+        {
+            await AsyncStorage.removeItem(publicUrlServer.idSaveOnStorage + "Login")
+            return false;
+        }
+        catch (error) {
+            console.error('Error:', error);
+            return true;
+        }
+    }
+
+
+
 
 
 }
