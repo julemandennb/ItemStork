@@ -8,15 +8,17 @@ export default class StorkItme{
     stork: number
     date:Date
     imgurl:string
+    from:string
 
     
-    constructor(id:number,name: string, stork: number,date:Date,imgurl:string)
+    constructor(id:number,name: string, stork: number,date:Date,imgurl:string,from:string)
     {
         this.id = id;
         this.name = name;
         this.stork = stork;
         this.date = date;
         this.imgurl = imgurl;
+        this.from = from
     }
 
 

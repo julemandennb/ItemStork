@@ -1,6 +1,4 @@
 import StorkItme from '@/model/StorkItme'
-import { Settings } from 'react-native';
-import { List } from 'react-native-paper';
 
 export default class StorkItmeServices{
 
@@ -30,7 +28,7 @@ export default class StorkItmeServices{
 
     public create (name: string, stork: number,date:Date,imgurl:string = "")
     {
-        let storkItme = new StorkItme(0,name,stork,date,imgurl);
+        let storkItme = new StorkItme(0,name,stork,date,imgurl,"local");
         this.addOneToList(storkItme);
     }
 
@@ -39,7 +37,7 @@ export default class StorkItmeServices{
         this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
-                case "list":
+                case "local":
                     this.storkItmes = this.storkItmes.filter(x => x.id != id)
                     break;
                 default:
@@ -60,7 +58,7 @@ export default class StorkItmeServices{
         this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
-                case "list":
+                case "local":
 
                     let itme =this.storkItmes.find(x => x.id === storkItme.id)
                     itme = storkItme;
@@ -76,18 +74,18 @@ export default class StorkItmeServices{
 
     private getListFromApi()
     {
-        this.AddSetting.push("list")
+        this.AddSetting.push("local")
         this.storkItmes = [
-            new StorkItme(1,"test1",5,new Date(2025,5,10),""),
-            new StorkItme(2,"test2",5,new Date(2025,5,10),""),
-            new StorkItme(3,"test3",5,new Date(2025,5,10),""),
-            new StorkItme(4,"test4",5,new Date(2025,5,10),""),
-            new StorkItme(5,"test5",5,new Date(2025,5,10),""),
-            new StorkItme(6,"test6",5,new Date(2025,5,10),""),
-            new StorkItme(7,"test7",5,new Date(2025,5,10),""),
-            new StorkItme(8,"test8",5,new Date(2025,5,10),""),
-            new StorkItme(9,"test9",5,new Date(2025,5,10),""),
-            new StorkItme(10,"test10",5,new Date(2025,5,10),"")
+            new StorkItme(1,"test1",5,new Date(2025,5,10),"","local"),
+            new StorkItme(2,"test2",5,new Date(2025,5,10),"","local"),
+            new StorkItme(3,"test3",5,new Date(2025,5,10),"","local"),
+            new StorkItme(4,"test4",5,new Date(2025,5,10),"","local"),
+            new StorkItme(5,"test5",5,new Date(2025,5,10),"","local"),
+            new StorkItme(6,"test6",5,new Date(2025,5,10),"","local"),
+            new StorkItme(7,"test7",5,new Date(2025,5,10),"","local"),
+            new StorkItme(8,"test8",5,new Date(2025,5,10),"","local"),
+            new StorkItme(9,"test9",5,new Date(2025,5,10),"","local"),
+            new StorkItme(10,"test10",5,new Date(2025,5,10),"","local")
         ];
     }
 
@@ -96,7 +94,7 @@ export default class StorkItmeServices{
         this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
-                case "list":
+                case "local":
 
                     let id = 1
 
@@ -122,7 +120,7 @@ export default class StorkItmeServices{
         this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
-                case "list":
+                case "local":
                     this.setIDAndAddToList(storkItems)
                     break
                 default:

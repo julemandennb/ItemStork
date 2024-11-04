@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
+import { StyleSheet} from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as React from 'react';
-import { Button, DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-paper';
+import { DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-paper';
 
 import Container from '@/components/Container'
 import StorkItme from '@/model/StorkItme';
