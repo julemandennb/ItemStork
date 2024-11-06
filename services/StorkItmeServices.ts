@@ -1,4 +1,5 @@
 import StorkItme from '@/model/StorkItme'
+import GetRightServices from '@/services/GetRightServices'
 
 export default class StorkItmeServices{
 
@@ -72,21 +73,21 @@ export default class StorkItmeServices{
         this.updateCallback(this.storkItmes);
     }
 
+    public UpdataListAfterLogin()
+    {
+        this.getListFromApi();
+    }
+
     private getListFromApi()
     {
-        this.AddSetting.push("local")
-        this.storkItmes = [
-            new StorkItme(1,"test1",5,new Date(2025,5,10),"","local"),
-            new StorkItme(2,"test2",5,new Date(2025,5,10),"","local"),
-            new StorkItme(3,"test3",5,new Date(2025,5,10),"","local"),
-            new StorkItme(4,"test4",5,new Date(2025,5,10),"","local"),
-            new StorkItme(5,"test5",5,new Date(2025,5,10),"","local"),
-            new StorkItme(6,"test6",5,new Date(2025,5,10),"","local"),
-            new StorkItme(7,"test7",5,new Date(2025,5,10),"","local"),
-            new StorkItme(8,"test8",5,new Date(2025,5,10),"","local"),
-            new StorkItme(9,"test9",5,new Date(2025,5,10),"","local"),
-            new StorkItme(10,"test10",5,new Date(2025,5,10),"","local")
-        ];
+        this.storkItmes = []
+
+        new GetRightServices().GetAllStorkItme().then(x =>{
+
+            this.storkItmes = x
+
+            this.updateCallback(this.storkItmes);
+        })
     }
 
     private addOneToList(storkItme:StorkItme)

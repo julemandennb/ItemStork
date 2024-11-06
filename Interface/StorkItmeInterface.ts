@@ -1,7 +1,7 @@
 import UsergroupInterface from "@/Interface/UsergroupInterface"
 
 export default interface StorkItmeInterface {
-    values: {
+    $values: {
         id: number;
         name: string;
         description: string;

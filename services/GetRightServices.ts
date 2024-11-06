@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ApiServices from '@/services/WebServerToGetInfo/ApiServices'
 import ReturnInfoFromWebServer from '@/model/ReturnInfoFromWebServer';
 import LoginList from '@/model/LoginList'
+import StorkItme from '@/model/StorkItme'
 
 export default class GetRightServices{
 
@@ -30,14 +31,14 @@ export default class GetRightServices{
 
         let returnInfoFromWebServer;
 
-
         switch(apiUrl.serverToUser)
         {
             case "api":
 
-                let body = JSON.stringify({ "email":username, "password":password })
+                //let body = JSON.stringify({ "email":username, "password":password })
+                let body = JSON.stringify({ "email":"admin@test.com", "password":"Admin!1" })
 
-                returnInfoFromWebServer = await new ApiServices().Login(body,apiUrl)
+                returnInfoFromWebServer = await new ApiServices().login(body,apiUrl)
 
                 if(!returnInfoFromWebServer.error)
                     this.AddLoginList(apiUrl)
@@ -54,6 +55,11 @@ export default class GetRightServices{
         return returnInfoFromWebServer;
     }
 
+    /**
+     * delete info to login 
+     * @param apiUrl itme to find right login server
+     * @returns return info
+     */
     public async Logud(apiUrl:PublicUrlServer)
     {
 
@@ -62,7 +68,7 @@ export default class GetRightServices{
         switch(apiUrl.serverToUser)
         {
             case "api":
-                    error = await new ApiServices().Logud(apiUrl)
+                    error = await new ApiServices().logout(apiUrl)
                 break;
             case "local":
                 return new ReturnInfoFromWebServer("local",true);
@@ -78,7 +84,10 @@ export default class GetRightServices{
         return "Logud " + apiUrl.displayName;
     }
 
-
+    /**
+     * get all login server is login on
+     * @returns login server
+     */
     public async GetLoginList()
     {
         let loginInfosJsonStr = await AsyncStorage.getItem(this.LoginListName)
@@ -88,6 +97,40 @@ export default class GetRightServices{
             loginInfos = JSON.parse(loginInfosJsonStr);
         
         return loginInfos;
+    }
+
+
+    public async GetAllStorkItme(): Promise<StorkItme[]>
+    {
+
+        let storkItmes:StorkItme[] = [];
+
+        let Logins = await this.GetLoginList()
+
+        for (const login of Logins) {
+
+            let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == login.id)
+
+            switch(apiUrl?.serverToUser)
+            {
+                case "api":
+
+                    let getallStorkItme = await new ApiServices().getAllStorkItems(apiUrl,false);
+
+                    if(getallStorkItme != undefined && getallStorkItme.data != null)
+                    {                
+                        storkItmes.push(...getallStorkItme.data)
+                    }
+
+                    break;
+                default:
+                    break;
+
+            }
+
+        }
+
+        return storkItmes;
     }
 
 

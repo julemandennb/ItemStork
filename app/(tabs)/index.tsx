@@ -7,10 +7,12 @@ import Container from '@/components/Container'
 import StorkItme from '@/model/StorkItme';
 import AddNewStorkItmeView from "@/components/AddNewStorkItmeView"
 import StorkItmeServices from "@/services/StorkItmeServices"
+import { useFocusEffect} from '@react-navigation/native';
 
 export default function HomeScreen() {
 
   const colorScheme = useColorScheme();
+
 
   const textColor = colorScheme === 'dark' ? "#fff" : "#000"
 
@@ -30,6 +32,20 @@ export default function HomeScreen() {
       setStorkItems([...updatedItems]); // Update the React state
     });
   }, [storkItmeServices]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Function to run when HomeScreen is focused
+
+      storkItmeServices.UpdataListAfterLogin();
+
+      console.log("serriugfhersuhg")
+      // Return a cleanup function if needed
+      return () => {
+        console.log('Home screen unfocused');
+      };
+    }, []) // Empty dependency array ensures this runs when the screen is focused
+  );
 
 
   const from = page * itemsPerPage;
