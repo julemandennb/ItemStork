@@ -103,14 +103,20 @@ export default class ApiServices {
                 });
 
                 if (response.ok) {
-                    const data: StorkItmeInterface = await response.json();
-                    const storkItems: StorkItme[] = data.$values.map(item =>
+                    const jsonObj = await response.json();
+
+                    const values:StorkItmeInterface[] = jsonObj.$values
+
+                    const storkItems: StorkItme[] = values.map(item =>
                         new StorkItme(
                             item.id,
                             item.name,
+                            item.description,
+                            item.type,
                             item.stork,
                             new Date(item.bestBy),
                             item.imgUrl,
+                            item.userGroup.$id,
                             publicUrlServer.idSaveOnStorage
                         )
                     );
@@ -132,5 +138,61 @@ export default class ApiServices {
             console.error('Get stork items error:', error);
             return new ReturnInfoFromWebServer('An error occurred while fetching stork items', true);
         }
+    }
+
+    public async UpdataStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
+    {
+        try {
+            const tokenLoginStr = await AsyncStorage.getItem(publicUrlServer.idSaveOnStorage + "Login");
+            if (tokenLoginStr) {
+                const tokenLogin: TokenLogin = JSON.parse(tokenLoginStr);
+
+                let body = JSON.stringify({
+                    "name": StorkItme.name,
+                    "description": StorkItme.description,
+                    "type": StorkItme.type,
+                    "bestBy": StorkItme.date,
+                    "stork": StorkItme.stork,
+                    "imgUrl": StorkItme.imgurl,
+                    "userGroupId": StorkItme.userGroupId
+                })
+
+                const response = await fetch(publicUrlServer.url + "/storkitme/Updata?id=" + StorkItme.id, {
+                    method: 'PUT',
+                    headers: {
+                        'Accept': "*/*",
+                        'Authorization': 'Bearer ' + tokenLogin.accessToken,
+                    },
+                    body:body
+                });
+
+                if (response.ok) {
+
+                  
+                    return new ReturnInfoFromWebServer('updata stork items', false);
+
+                }
+                else
+                {
+
+                    if (!this.loginError) {
+                        const isTokenRefreshed = await this.handleLoginError(publicUrlServer);
+                        if (isTokenRefreshed) {
+                            return this.UpdataStorkItme(publicUrlServer, StorkItme);
+                        }
+                    }
+                    return new ReturnInfoFromWebServer('Failed to updata stork items', true);
+
+                }
+
+            }else {
+                return new ReturnInfoFromWebServer('User is not logged in', true);
+            }
+        }
+        catch (error) {
+            console.error('Get stork items error:', error);
+            return new ReturnInfoFromWebServer('An error occurred while try to updata stork items', true);
+        }
+
     }
 }

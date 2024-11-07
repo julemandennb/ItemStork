@@ -39,10 +39,10 @@ export default function HomeScreen() {
 
       storkItmeServices.UpdataListAfterLogin();
 
-      console.log("serriugfhersuhg")
+     
       // Return a cleanup function if needed
       return () => {
-        console.log('Home screen unfocused');
+        
       };
     }, []) // Empty dependency array ensures this runs when the screen is focused
   );

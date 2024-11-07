@@ -56,21 +56,32 @@ export default class StorkItmeServices{
 
     public updata(storkItme: StorkItme)
     {
-        this.AddSetting.forEach(Setting => {
-            switch(Setting)
-            {
-                case "local":
+        // this.AddSetting.forEach(Setting => {
+        //     switch(Setting)
+        //     {
+        //         case "local":
 
-                    let itme =this.storkItmes.find(x => x.id === storkItme.id)
-                    itme = storkItme;
+        //             let itme =this.storkItmes.find(x => x.id === storkItme.id)
+        //             itme = storkItme;
 
-                    break
-                default:
-                    break
-            }
-        });
+        //             break
+        //         default:
+        //             break
+        //     }
+        // });
 
-        this.updateCallback(this.storkItmes);
+
+        new GetRightServices().UpdataStorkItme(storkItme).then(x =>{
+
+            let itme =this.storkItmes.find(x => x.id === storkItme.id && x.from == storkItme.from)
+            itme = storkItme;
+
+            this.updateCallback(this.storkItmes);
+
+        })
+
+
+        
     }
 
     public UpdataListAfterLogin()

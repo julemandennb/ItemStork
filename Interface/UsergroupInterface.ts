@@ -3,8 +3,8 @@ import StorkItmeInterface from "@/Interface/StorkItmeInterface"
 import UserInterface from "@/Interface/UserInterface"
 
 export default interface UsergroupInterface {
-    values: {
-        id: number;
+
+        $id: number;
         name: string;
         description: string;
         type:string;
@@ -13,5 +13,5 @@ export default interface UsergroupInterface {
         imgUrl:string;
         storkItmes:StorkItmeInterface[];
         users:UserInterface[];
-    }[];
+    
 }

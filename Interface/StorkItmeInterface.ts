@@ -1,7 +1,7 @@
 import UsergroupInterface from "@/Interface/UsergroupInterface"
 
 export default interface StorkItmeInterface {
-    $values: {
+
         id: number;
         name: string;
         description: string;
@@ -10,5 +10,5 @@ export default interface StorkItmeInterface {
         stork:number;
         imgUrl:string;
         userGroup:UsergroupInterface
-    }[];
+
 }

@@ -20,6 +20,9 @@ export default class GetRightServices{
         this.updateCallback = callback;
     }
 
+
+    //#region User Setting
+
       /**
      * Authenticates a user with username and password.
      * @param username - The username of the user.
@@ -84,6 +87,11 @@ export default class GetRightServices{
         return "Logud " + apiUrl.displayName;
     }
 
+    //#endregion
+
+
+    //#region Get
+
     /**
      * get all login server is login on
      * @returns login server
@@ -99,7 +107,10 @@ export default class GetRightServices{
         return loginInfos;
     }
 
-
+    /**
+ * get all StorkItme from all login server
+ * @returns list of StorkItme
+ */
     public async GetAllStorkItme(): Promise<StorkItme[]>
     {
 
@@ -133,7 +144,42 @@ export default class GetRightServices{
         return storkItmes;
     }
 
+    //#endregion
 
+    //#region updata
+
+    public async UpdataStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
+    {
+        let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == storkItme.from)
+
+        if(apiUrl != null)
+        {
+
+            switch(apiUrl?.serverToUser)
+            {
+                case "api":
+                      return await new ApiServices().UpdataStorkItme(apiUrl,storkItme)
+                default:
+                    break;
+
+            }
+
+
+
+
+        }
+
+        return new ReturnInfoFromWebServer("cannot find right server",true);
+
+    }
+
+    //#endregion
+
+    //#region private
+    /**
+ * add to list hold all server login to
+ * @param apiUrl server to add to list
+ */
     private async AddLoginList(apiUrl:PublicUrlServer)
     {
         let loginIfo = new LoginList(apiUrl.displayName,apiUrl.idSaveOnStorage)
@@ -149,6 +195,10 @@ export default class GetRightServices{
         await AsyncStorage.setItem(this.LoginListName, JSON.stringify(loginInfos))
     }
 
+    /**
+     * remove to from list hold all server login
+     * @param apiUrl server to remove
+     */
     private async RemoveLoginList(apiUrl:PublicUrlServer)
     {
         let loginInfos:LoginList[] = [];
@@ -165,6 +215,7 @@ export default class GetRightServices{
 
     }
     
+    //#endregion
 
 
 
