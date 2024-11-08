@@ -60,7 +60,7 @@ export default function HomeScreen() {
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, storkItems.length);
 
-  const newStorkItme = AddNewStorkItmeView(storkItmeServices)
+  const newStorkItme = AddNewStorkItmeView(storkItmeServices,usergroupServices)
 
   return (
       <Container>

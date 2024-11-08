@@ -5,6 +5,7 @@ import { Button, Text,Portal,Modal,TextInput  } from 'react-native-paper';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import StorkItme from '@/model/StorkItme';
 import DateTimePicker from 'react-native-ui-datepicker';
+import {Picker} from '@react-native-picker/picker';
 
 import StorkItmeServices from "@/services/StorkItmeServices"
 import UsergroupServices from '@/services/UsergroupServices';
@@ -14,6 +15,8 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
     //#region to show popup box
     const [visible, setVisible] = React.useState<boolean>(false);
     const [showDateTimePicker, setShowDateTimePicker] = React.useState(false);
+    const [updataCall, setupdataCall] = React.useState(false);
+
     //#endregion
 
     //#region get right color
@@ -28,11 +31,11 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
     const [stock, setStock] = React.useState(0);
     const [date, setDate] = React.useState(new Date(new Date().setFullYear((new Date().getFullYear() + 1))));
     const [userGroupId, setuserGroupId] = React.useState(0);
-    const [updataCall, setupdataCall] = React.useState(false);
-
+   
     const [storkItme, setstorkItme] = React.useState<StorkItme|null>(null);
     //#endregion
-    
+
+
 
     /**
      * set str to only hav number
@@ -103,6 +106,35 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
         )
     }
 
+    /**
+     * to make a seleter to userGroup
+     * @returns seleter to this
+     */
+    const MakeUserGroupIdSeleter = () =>{
+
+        return(
+
+            <View>
+                <Text style={{color:textColor}}>userGroup</Text>
+
+                <Picker
+                    selectedValue={userGroupId}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setuserGroupId(itemValue)
+                    }>
+                    {usergroupServices.GetUsergroups().map((obj,index) => (
+                            <Picker.Item key={index} label={obj.name} value={obj.id} />
+                    ))}
+                    
+                </Picker>
+            </View>
+
+
+        )
+        
+
+
+    }
 
     
     /**
@@ -132,7 +164,8 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
 
             <Portal>
                 <Modal visible={visible} onDismiss={() => {setVisible(false);}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
-                    <Text style={{color:textColor}}>Example Modal.  Click outside this area to dismiss.</Text>
+
+                    {MakeUserGroupIdSeleter()}
 
                     <TextInput
                         style={{color:textColor}}
@@ -171,12 +204,18 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
 
     }
 
+    /**
+     * to make a new StorkItme
+     */
     const callMakeStorkItme = () =>
     {
         storkItmeServices.create(text,stock,date)
         setVisible(false);
     }
 
+    /**
+     * to updata StorkItme
+     */
     const callUpdataStorkItme = () =>{
 
 
@@ -186,6 +225,7 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,
             storkItmeNew.name = text;
             storkItmeNew.stork = stock;
             storkItmeNew.date = date;
+            storkItmeNew.userGroupId = userGroupId;
             storkItmeServices.updata(storkItmeNew)
         }
         setVisible(false);
