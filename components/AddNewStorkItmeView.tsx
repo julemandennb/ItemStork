@@ -26,8 +26,10 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
     const [text, setText] = React.useState("");
     const [stock, setStock] = React.useState(0);
     const [date, setDate] = React.useState(new Date(new Date().setFullYear((new Date().getFullYear() + 1))));
-    const [id, setId] = React.useState(0);
     const [userGroupId, setuserGroupId] = React.useState(0);
+    const [updataCall, setupdataCall] = React.useState(false);
+
+    const [storkItme, setstorkItme] = React.useState<StorkItme|null>(null);
     //#endregion
     
 
@@ -40,14 +42,18 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         setStock(+str.replace(/[^0-9]/g, ''))
     }
 
+    /**
+     * to set new info on itme
+     * @param storkItme storkItme itme to updata
+     */
     const editorOpen = (storkItme:StorkItme) =>{
         setText(storkItme.name);
         setStock(storkItme.stork);
         setShowDateTimePicker(false);
         setDate(storkItme.date);
-        setId(storkItme.id);
         setuserGroupId(storkItme.userGroupId);
-
+        setstorkItme(storkItme);
+        setupdataCall(true);
         setVisible(true);
     }
 
@@ -61,9 +67,9 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         setStock(0);
         setShowDateTimePicker(false);
         setDate(new Date(new Date().setFullYear((new Date().getFullYear() + 1))));
-        setId(0);
         setuserGroupId(0);
-
+        setstorkItme(null)
+        setupdataCall(false);
         setVisible(true);
     }
 
@@ -149,9 +155,12 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
                         <Text style={{color:textColor}}>date {date.toLocaleString("da").split(",")[0]} </Text>
                     </Button>
 
-                    <Button icon="plus" mode="contained" onPress={() => callMakeStorkItme()} style={{color:textColor}}>
-                        Save
-                    </Button>
+                    {updataCall ?  
+                        <Button icon="plus" mode="contained" onPress={() => callUpdataStorkItme()} style={{color:textColor}}>Updata</Button> :
+                        <Button icon="plus" mode="contained" onPress={() => callMakeStorkItme()} style={{color:textColor}}>Save</Button>
+                    }
+               
+                    
 
 
                 </Modal>
@@ -164,6 +173,20 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
     const callMakeStorkItme = () =>
     {
         storkItmeServices.create(text,stock,date)
+        setVisible(false);
+    }
+
+    const callUpdataStorkItme = () =>{
+
+
+        let storkItmeNew = storkItme
+        if(storkItmeNew != null)
+        {
+            storkItmeNew.name = text;
+            storkItmeNew.stork = stock;
+            storkItmeNew.date = date;
+            storkItmeServices.updata(storkItmeNew)
+        }
         setVisible(false);
     }
 

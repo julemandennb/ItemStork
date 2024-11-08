@@ -4,7 +4,7 @@ import UserInterface from "@/Interface/UserInterface"
 
 export default interface UsergroupInterface {
 
-        $id: number;
+        id: number;
         name: string;
         description: string;
         type:string;

@@ -117,7 +117,7 @@ export default class ApiServices {
                             item.stork,
                             new Date(item.bestBy),
                             item.imgUrl,
-                            item.userGroup.$id,
+                            item.userGroup.id,
                             publicUrlServer.idSaveOnStorage
                         )
                     );
@@ -162,6 +162,7 @@ export default class ApiServices {
                     method: 'PUT',
                     headers: {
                         'Accept': "*/*",
+                        'Content-Type':"application/json",
                         'Authorization': 'Bearer ' + tokenLogin.accessToken,
                     },
                     body:body
@@ -169,14 +170,12 @@ export default class ApiServices {
 
                 if (response.ok) {
 
-                  
                     return new ReturnInfoFromWebServer('updata stork items', false);
 
                 }
                 else
                 {
-
-                    if (!this.loginError) {
+                    if (!this.loginError && response.status == 401) {
                         const isTokenRefreshed = await this.handleLoginError(publicUrlServer);
                         if (isTokenRefreshed) {
                             return this.UpdataStorkItme(publicUrlServer, StorkItme);

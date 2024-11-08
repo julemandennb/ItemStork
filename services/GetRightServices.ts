@@ -153,7 +153,6 @@ export default class GetRightServices{
     public async UpdataStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
     {
         let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == storkItme.from)
-
         if(apiUrl != null)
         {
 
@@ -165,9 +164,6 @@ export default class GetRightServices{
                     break;
 
             }
-
-
-
 
         }
 
