@@ -7,8 +7,9 @@ import StorkItme from '@/model/StorkItme';
 import DateTimePicker from 'react-native-ui-datepicker';
 
 import StorkItmeServices from "@/services/StorkItmeServices"
+import UsergroupServices from '@/services/UsergroupServices';
 
-export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices) {
+export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices,usergroupServices:UsergroupServices) {
 
     //#region to show popup box
     const [visible, setVisible] = React.useState<boolean>(false);

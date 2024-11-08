@@ -10,7 +10,7 @@ export default class StorkItmeServices{
     public constructor()
     {
         this.storkItmes = [];
-        this.getListFromApi()
+        //this.getListFromApi()
     }
 
     public onUpdate(callback: (items: StorkItme[]) => void) {

@@ -8,6 +8,8 @@ import StorkItme from '@/model/StorkItme';
 import AddNewStorkItmeView from "@/components/AddNewStorkItmeView"
 import StorkItmeServices from "@/services/StorkItmeServices"
 import { useFocusEffect} from '@react-navigation/native';
+import UsergroupServices from '@/services/UsergroupServices';
+import Usergroup from '@/model/Usergroup';
 
 export default function HomeScreen() {
 
@@ -33,17 +35,24 @@ export default function HomeScreen() {
     });
   }, [storkItmeServices]);
 
+
+  const usergroupServices = React.useRef(new UsergroupServices()).current;
+  const [usergroups, setUsergroups] = React.useState<Usergroup[]>(usergroupServices.GetUsergroups());
+
+  React.useEffect(() => {
+    // Register the callback to update the state when new items are added
+    usergroupServices.onUpdate((updatedItems: Usergroup[]) => {
+      setUsergroups([...updatedItems]); // Update the React state
+    });
+  }, [usergroupServices]);
+
+
   useFocusEffect(
     React.useCallback(() => {
       // Function to run when HomeScreen is focused
-
       storkItmeServices.UpdataListAfterLogin();
+      usergroupServices.UpdataListAfterLogin();
 
-     
-      // Return a cleanup function if needed
-      return () => {
-        
-      };
     }, []) // Empty dependency array ensures this runs when the screen is focused
   );
 
