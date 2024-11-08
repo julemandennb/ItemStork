@@ -26,6 +26,8 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
     const [text, setText] = React.useState("");
     const [stock, setStock] = React.useState(0);
     const [date, setDate] = React.useState(new Date(new Date().setFullYear((new Date().getFullYear() + 1))));
+    const [id, setId] = React.useState(0);
+    const [userGroupId, setuserGroupId] = React.useState(0);
     //#endregion
     
 
@@ -38,6 +40,18 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         setStock(+str.replace(/[^0-9]/g, ''))
     }
 
+    const editorOpen = (storkItme:StorkItme) =>{
+        setText(storkItme.name);
+        setStock(storkItme.stork);
+        setShowDateTimePicker(false);
+        setDate(storkItme.date);
+        setId(storkItme.id);
+        setuserGroupId(storkItme.userGroupId);
+
+        setVisible(true);
+    }
+
+
     /**
      * set all React.useState to start val and show popup
      */
@@ -47,6 +61,8 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         setStock(0);
         setShowDateTimePicker(false);
         setDate(new Date(new Date().setFullYear((new Date().getFullYear() + 1))));
+        setId(0);
+        setuserGroupId(0);
 
         setVisible(true);
     }
@@ -60,7 +76,7 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         return(
 
             <Portal>
-                <Modal visible={showDateTimePicker} onDismiss={() => {setShowDateTimePicker(false); console.log(54654654)}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
+                <Modal visible={showDateTimePicker} onDismiss={() => {setShowDateTimePicker(false);}} contentContainerStyle={{backgroundColor: backgroudColor, padding: 20}}>
 
                     <View>
 
@@ -151,6 +167,6 @@ export default function AddNewStorkItmeView(storkItmeServices:StorkItmeServices)
         setVisible(false);
     }
 
-    return {btn,ModalFrom}
+    return {btn,ModalFrom,editorOpen}
 
 }

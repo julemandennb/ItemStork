@@ -1,19 +1,20 @@
 import PublicUrlServer from '@/model/PublicUrlServer';
 import TokenLogin from '@/model/TokenLogin';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ReturnInfoFromWebServer from '@/model/ReturnInfoFromWebServer';
 import StorkItme from '@/model/StorkItme';
 import StorkItmeInterface from "@/Interface/StorkItmeInterface";
+import StorageService from "@/services/StorageService";
 
 export default class ApiServices {
     private loginError: boolean = false;
+    private StorageService:StorageService = new StorageService()
 
     constructor() {}
 
     private async handleLoginError(publicUrlServer: PublicUrlServer): Promise<boolean> {
         if (!this.loginError) {
             this.loginError = true;
-            const tokenLoginStr = await AsyncStorage.getItem(publicUrlServer.idSaveOnStorage + "Login");
+            const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
             if (tokenLoginStr) {
                 const tokenLogin: TokenLogin = JSON.parse(tokenLoginStr);
                 const body = JSON.stringify({ refreshToken: tokenLogin.refreshToken });
@@ -37,7 +38,7 @@ export default class ApiServices {
                         newTokenLogin.refreshToken = data.refreshToken;
 
                         this.loginError = false;
-                        await AsyncStorage.setItem(publicUrlServer.idSaveOnStorage + "Login", JSON.stringify(newTokenLogin));
+                        await this.StorageService.SetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login", JSON.stringify(newTokenLogin));
                         return true;
                     }
                 } catch (error) {
@@ -67,7 +68,7 @@ export default class ApiServices {
                 tokenLogin.expiresIn = data.expiresIn;
                 tokenLogin.refreshToken = data.refreshToken;
 
-                await AsyncStorage.setItem(publicUrlServer.idSaveOnStorage + "Login", JSON.stringify(tokenLogin));
+                await this.StorageService.SetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login", JSON.stringify(tokenLogin));
                 return new ReturnInfoFromWebServer('Login Successful', false);
             } else {
                 return new ReturnInfoFromWebServer('Login Failed: Invalid username or password', true);
@@ -80,7 +81,7 @@ export default class ApiServices {
 
     public async logout(publicUrlServer: PublicUrlServer): Promise<boolean> {
         try {
-            await AsyncStorage.removeItem(publicUrlServer.idSaveOnStorage + "Login");
+            await this.StorageService.RemoveItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
             return true;
         } catch (error) {
             console.error('Logout error:', error);
@@ -90,7 +91,7 @@ export default class ApiServices {
 
     public async getAllStorkItems(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer | undefined> {
         try {
-            const tokenLoginStr = await AsyncStorage.getItem(publicUrlServer.idSaveOnStorage + "Login");
+            const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
             if (tokenLoginStr) {
                 const tokenLogin: TokenLogin = JSON.parse(tokenLoginStr);
 
@@ -143,7 +144,7 @@ export default class ApiServices {
     public async UpdataStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
     {
         try {
-            const tokenLoginStr = await AsyncStorage.getItem(publicUrlServer.idSaveOnStorage + "Login");
+            const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
             if (tokenLoginStr) {
                 const tokenLogin: TokenLogin = JSON.parse(tokenLoginStr);
 

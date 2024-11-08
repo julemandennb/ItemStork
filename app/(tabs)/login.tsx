@@ -4,9 +4,6 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { View,TextInput, Button, Alert, StyleSheet } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import { DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-paper';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import TokenLogin from '@/model/TokenLogin';
 import GetRightLoginServices from '@/services/GetRightServices';
 import LoginList from '@/model/LoginList';
 

@@ -1,10 +1,11 @@
-import TokenLogin from '@/model/TokenLogin';
+
 import PublicUrlServer from '@/model/PublicUrlServer'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import ApiServices from '@/services/WebServerToGetInfo/ApiServices'
 import ReturnInfoFromWebServer from '@/model/ReturnInfoFromWebServer';
 import LoginList from '@/model/LoginList'
 import StorkItme from '@/model/StorkItme'
+import StorageService from "@/services/StorageService";
+
 
 export default class GetRightServices{
 
@@ -13,6 +14,7 @@ export default class GetRightServices{
 
 
     apiUrls:PublicUrlServer[] = JSON.parse(process.env.EXPO_PUBLIC_URL_SERVER || '[]');
+    private StorageService:StorageService = new StorageService()
 
     constructor(){}
 
@@ -98,7 +100,7 @@ export default class GetRightServices{
      */
     public async GetLoginList()
     {
-        let loginInfosJsonStr = await AsyncStorage.getItem(this.LoginListName)
+        let loginInfosJsonStr = await this.StorageService.GetItemFromStorage(this.LoginListName)
         let loginInfos:LoginList[] = [];
 
         if(loginInfosJsonStr != null)
@@ -185,14 +187,14 @@ export default class GetRightServices{
         let loginIfo = new LoginList(apiUrl.displayName,apiUrl.idSaveOnStorage)
         let loginInfos:LoginList[] = [];
 
-        let loginInfosJsonStr = await AsyncStorage.getItem(this.LoginListName)
+        let loginInfosJsonStr = await this.StorageService.GetItemFromStorage(this.LoginListName)
 
         if(loginInfosJsonStr != null)
             loginInfos =  JSON.parse(loginInfosJsonStr);
 
         loginInfos.push(loginIfo)
 
-        await AsyncStorage.setItem(this.LoginListName, JSON.stringify(loginInfos))
+        await this.StorageService.SetItemFromStorage(this.LoginListName, JSON.stringify(loginInfos))
     }
 
     /**
@@ -203,7 +205,7 @@ export default class GetRightServices{
     {
         let loginInfos:LoginList[] = [];
 
-        let loginInfosJsonStr = await AsyncStorage.getItem(this.LoginListName)
+        let loginInfosJsonStr = await this.StorageService.GetItemFromStorage(this.LoginListName)
         if(loginInfosJsonStr != null)
         {
             loginInfos =  JSON.parse(loginInfosJsonStr);
@@ -211,7 +213,7 @@ export default class GetRightServices{
             loginInfos = loginInfos.filter(x => x.id != apiUrl.idSaveOnStorage)
         }
 
-        await AsyncStorage.setItem(this.LoginListName, JSON.stringify(loginInfos))
+        await this.StorageService.SetItemFromStorage(this.LoginListName, JSON.stringify(loginInfos))
 
     }
     

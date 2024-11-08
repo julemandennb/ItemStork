@@ -77,7 +77,7 @@ export default function HomeScreen() {
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.stork}</DataTable.Cell>
                 <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.GetDateStr()}</DataTable.Cell>
 
-                <DataTable.Cell onPress={() => console.log('Editor')} style={styles.DataTableCenterCell}>
+                <DataTable.Cell onPress={() => newStorkItme.editorOpen(item)} style={styles.DataTableCenterCell}>
                     <Icon source="pen" color={MD3Colors.primary50} size={20}/>
                 </DataTable.Cell>
 
