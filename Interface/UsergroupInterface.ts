@@ -6,11 +6,7 @@ export default interface UsergroupInterface {
 
         id: number;
         name: string;
-        description: string;
-        type:string;
-        bestBy:Date;
-        stork:number;
-        imgUrl:string;
+        color: string;
         storkItmes:StorkItmeInterface[];
         users:UserInterface[];
     

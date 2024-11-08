@@ -1,10 +1,11 @@
 
 import PublicUrlServer from '@/model/PublicUrlServer'
-import ApiServices from '@/services/WebServerToGetInfo/ApiServices'
+import ApiServices from '@/services/WebServerToGetOrSetInfo/ApiServices'
 import ReturnInfoFromWebServer from '@/model/ReturnInfoFromWebServer';
 import LoginList from '@/model/LoginList'
 import StorkItme from '@/model/StorkItme'
 import StorageService from "@/services/StorageService";
+import Usergroup from '@/model/Usergroup';
 
 
 export default class GetRightServices{
@@ -94,57 +95,93 @@ export default class GetRightServices{
 
     //#region Get
 
-    /**
-     * get all login server is login on
-     * @returns login server
-     */
-    public async GetLoginList()
-    {
-        let loginInfosJsonStr = await this.StorageService.GetItemFromStorage(this.LoginListName)
-        let loginInfos:LoginList[] = [];
+        /**
+         * get all login server is login on
+         * @returns login server
+         */
+        public async GetLoginList()
+        {
+            let loginInfosJsonStr = await this.StorageService.GetItemFromStorage(this.LoginListName)
+            let loginInfos:LoginList[] = [];
 
-        if(loginInfosJsonStr != null)
-            loginInfos = JSON.parse(loginInfosJsonStr);
-        
-        return loginInfos;
-    }
+            if(loginInfosJsonStr != null)
+                loginInfos = JSON.parse(loginInfosJsonStr);
+            
+            return loginInfos;
+        }
 
-    /**
- * get all StorkItme from all login server
- * @returns list of StorkItme
- */
-    public async GetAllStorkItme(): Promise<StorkItme[]>
-    {
+        /**
+        * get all StorkItme from all login server
+        * @returns list of StorkItme
+        */
+        public async GetAllStorkItme(): Promise<StorkItme[]>
+        {
 
-        let storkItmes:StorkItme[] = [];
+            let storkItmes:StorkItme[] = [];
 
-        let Logins = await this.GetLoginList()
+            let Logins = await this.GetLoginList()
 
-        for (const login of Logins) {
+            for (const login of Logins) {
 
-            let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == login.id)
+                let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == login.id)
 
-            switch(apiUrl?.serverToUser)
-            {
-                case "api":
+                switch(apiUrl?.serverToUser)
+                {
+                    case "api":
 
-                    let getallStorkItme = await new ApiServices().getAllStorkItems(apiUrl,false);
+                        let getallStorkItme = await new ApiServices().GetAllStorkItems(apiUrl,false);
 
-                    if(getallStorkItme != undefined && getallStorkItme.data != null)
-                    {                
-                        storkItmes.push(...getallStorkItme.data)
-                    }
+                        if(getallStorkItme != undefined && getallStorkItme.data != null)
+                        {                
+                            storkItmes.push(...getallStorkItme.data)
+                        }
 
-                    break;
-                default:
-                    break;
+                        break;
+                    default:
+                        break;
+
+                }
 
             }
 
+            return storkItmes;
         }
 
-        return storkItmes;
-    }
+        /**
+         * Get all Usergroup from all login server
+         * @returns list of Usergroup
+         */
+        public async GetAllUsergroup(): Promise<Usergroup[]>
+        {
+            let usergroup:Usergroup[] = []
+            let Logins = await this.GetLoginList()
+
+            for (const login of Logins) {
+
+                let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == login.id)
+
+                switch(apiUrl?.serverToUser)
+                {
+                    case "api":
+
+                        let getAllUsergroup = await new ApiServices().GetAllUsergroup(apiUrl,false)
+
+                        if(getAllUsergroup != undefined && getAllUsergroup.data != null)
+                        {                
+                            usergroup.push(...getAllUsergroup.data)
+                        }
+
+                        break;
+                    default:
+                        break;
+
+                }
+
+            }
+
+            console.log(usergroup)
+            return usergroup;
+        }
 
     //#endregion
 
@@ -162,13 +199,9 @@ export default class GetRightServices{
                       return await new ApiServices().UpdataStorkItme(apiUrl,storkItme)
                 default:
                     break;
-
             }
-
         }
-
         return new ReturnInfoFromWebServer("cannot find right server",true);
-
     }
 
     //#endregion

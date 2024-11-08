@@ -7,13 +7,9 @@ export default class StorkItmeServices{
     private storkItmes : StorkItme[];
     private updateCallback: (items: StorkItme[]) => void = () => {};
     
-    //make a obj to this
-    private AddSetting: any[]
-
     public constructor()
     {
         this.storkItmes = [];
-        this.AddSetting = [];
         this.getListFromApi()
     }
 
@@ -29,13 +25,13 @@ export default class StorkItmeServices{
 
     public create (name: string, stork: number,date:Date,imgurl:string = "")
     {
-        let storkItme = new StorkItme(0,name,stork,date,imgurl,"local");
-        this.addOneToList(storkItme);
+       /* let storkItme = new StorkItme(0,name,stork,date,imgurl,"local");
+        this.addOneToList(storkItme);*/
     }
 
     public remove(id:number)
     {
-        this.AddSetting.forEach(Setting => {
+        /*this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
                 case "local":
@@ -44,7 +40,7 @@ export default class StorkItmeServices{
                 default:
                     break;
             }
-        })
+        })*/
 
         this.updateCallback(this.storkItmes);
     }
@@ -84,7 +80,7 @@ export default class StorkItmeServices{
 
     private addOneToList(storkItme:StorkItme)
     {
-        this.AddSetting.forEach(Setting => {
+       /* this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
                 case "local":
@@ -103,14 +99,14 @@ export default class StorkItmeServices{
                 default:
                     break
             }
-        });
+        });*/
 
         this.updateCallback(this.storkItmes);
     }
 
     private addManyToList(storkItems:StorkItme[])
     {
-        this.AddSetting.forEach(Setting => {
+       /* this.AddSetting.forEach(Setting => {
             switch(Setting)
             {
                 case "local":
@@ -120,28 +116,8 @@ export default class StorkItmeServices{
                     break
             }
         });
-
+*/
         this.updateCallback(this.storkItmes);
     }
-
-    private setIDAndAddToList(storkItems:StorkItme[])
-    {
-        let id = 1
-
-        if(this.storkItmes.length > 0)
-            id = this.storkItmes[this.storkItmes.length -1].id + 1
-
-        storkItems.forEach(itme => {
-
-            itme.id = id
-            this.storkItmes.push(itme)
-            id++;
-        });
-
-    }
-    
-
-
-
 
 }

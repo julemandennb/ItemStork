@@ -12,8 +12,9 @@ export default class StorkItme{
     imgurl:string
     userGroupId:number
     from:string
+    color:string
     
-    constructor(id:number,name: string,description: string,type: string, stork: number,date:Date,imgurl:string,userGroupId:number,from:string)
+    constructor(id:number,name: string,description: string,type: string, stork: number,date:Date,imgurl:string,userGroupId:number,from:string,color:string ="")
     {
         this.id = id;
         this.name = name;
@@ -24,6 +25,7 @@ export default class StorkItme{
         this.imgurl = imgurl;
         this.userGroupId = userGroupId;
         this.from = from;
+        this.color = color;
     }
 
 
