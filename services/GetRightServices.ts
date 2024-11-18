@@ -82,7 +82,7 @@ export default class GetRightServices{
                     return new ReturnInfoFromWebServer("cannot find Services",true);
             }
 
-            if(error)
+            if(!error)
                 return "cannot Logud " +apiUrl.displayName;
             else
                 this.RemoveLoginList(apiUrl)
@@ -186,7 +186,7 @@ export default class GetRightServices{
 
         public async UpdataStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
-            let apiUrl = this.apiUrls.find(x => x.idSaveOnStorage == storkItme.from)
+            let apiUrl = this.GetRightApiUrls(storkItme.from)
             if(apiUrl != null)
             {
 
@@ -202,6 +202,31 @@ export default class GetRightServices{
         }
 
     //#endregion
+
+    //#region Post
+
+
+    public async CreateStorkitme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
+    {
+
+        let apiUrl = this.GetRightApiUrls(storkItme.from)
+        if(apiUrl != null)
+        {
+            switch(apiUrl?.serverToUser)
+            {
+                case "api":
+                    return await new ApiServices().CreateStorkItems(apiUrl,storkItme)
+                default:
+                    break;
+            }
+
+        }
+        return new ReturnInfoFromWebServer("cannot find right server",true);
+    }
+
+
+    //#endregion
+
 
     //#region private
 
@@ -242,6 +267,11 @@ export default class GetRightServices{
 
             await this.StorageService.SetItemFromStorage(this.LoginListName, JSON.stringify(loginInfos))
 
+        }
+
+        private GetRightApiUrls(id:string)
+        {
+            return this.apiUrls.find(x => x.idSaveOnStorage == id)
         }
         
     //#endregion

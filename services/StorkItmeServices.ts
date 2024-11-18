@@ -1,4 +1,5 @@
 import StorkItme from '@/model/StorkItme'
+import Usergroup from '@/model/Usergroup';
 import GetRightServices from '@/services/GetRightServices'
 
 export default class StorkItmeServices{
@@ -23,10 +24,10 @@ export default class StorkItmeServices{
         return this.storkItmes;
     }
 
-    public create (name: string, stork: number,date:Date,imgurl:string = "")
+    public create (name: string,description:string,type:string, date:Date,stork: number,userGroup:Usergroup,imgurl:string = "")
     {
-       /* let storkItme = new StorkItme(0,name,stork,date,imgurl,"local");
-        this.addOneToList(storkItme);*/
+        let storkItme = new StorkItme(0,name,description,type,stork,date,imgurl,userGroup.id,userGroup.from);
+        this.addOneToList(storkItme);
     }
 
     public remove(id:number)
@@ -80,28 +81,12 @@ export default class StorkItmeServices{
 
     private addOneToList(storkItme:StorkItme)
     {
-       /* this.AddSetting.forEach(Setting => {
-            switch(Setting)
-            {
-                case "local":
-
-                    let id = 1
-
-                    if(this.storkItmes.length > 0)
-                        id = this.storkItmes[this.storkItmes.length -1].id + 1
-
-                    storkItme.id = id
-
-                    this.storkItmes.push(storkItme)
-
-
-                    break
-                default:
-                    break
-            }
-        });*/
-
-        this.updateCallback(this.storkItmes);
+        new GetRightServices().CreateStorkitme(storkItme).then(x => {
+           
+            if(!x.error)
+                this.getListFromApi()
+           
+        })
     }
 
     private addManyToList(storkItems:StorkItme[])

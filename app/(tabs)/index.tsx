@@ -28,6 +28,13 @@ export default function HomeScreen() {
   const storkItmeServices = React.useRef(new StorkItmeServices()).current;
   const [storkItems, setStorkItems] = React.useState<StorkItme[]>(storkItmeServices.GetStorkItmes());
 
+  const usergroupServices = React.useRef(new UsergroupServices()).current;
+  const [usergroups, setUsergroups] = React.useState<Usergroup[]>(usergroupServices.GetUsergroups());
+
+
+  const newStorkItme = AddNewStorkItmeView(storkItmeServices,usergroupServices)
+
+
   React.useEffect(() => {
     // Register the callback to update the state when new items are added
     storkItmeServices.onUpdate((updatedItems: StorkItme[]) => {
@@ -35,14 +42,11 @@ export default function HomeScreen() {
     });
   }, [storkItmeServices]);
 
-
-  const usergroupServices = React.useRef(new UsergroupServices()).current;
-  const [usergroups, setUsergroups] = React.useState<Usergroup[]>(usergroupServices.GetUsergroups());
-
   React.useEffect(() => {
     // Register the callback to update the state when new items are added
     usergroupServices.onUpdate((updatedItems: Usergroup[]) => {
       setUsergroups([...updatedItems]); // Update the React state
+      newStorkItme.setusergroupList(updatedItems)
     });
   }, [usergroupServices]);
 
@@ -53,14 +57,13 @@ export default function HomeScreen() {
       storkItmeServices.UpdataListAfterLogin();
       usergroupServices.UpdataListAfterLogin();
 
+
     }, []) // Empty dependency array ensures this runs when the screen is focused
   );
 
 
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, storkItems.length);
-
-  const newStorkItme = AddNewStorkItmeView(storkItmeServices,usergroupServices)
 
   return (
       <Container>
