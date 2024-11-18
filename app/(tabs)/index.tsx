@@ -11,6 +11,9 @@ import { useFocusEffect} from '@react-navigation/native';
 import UsergroupServices from '@/services/UsergroupServices';
 import Usergroup from '@/model/Usergroup';
 
+import Toast from 'react-native-toast-message';
+
+
 export default function HomeScreen() {
 
   const colorScheme = useColorScheme();
@@ -65,6 +68,14 @@ export default function HomeScreen() {
   const from = page * itemsPerPage;
   const to = Math.min((page + 1) * itemsPerPage, storkItems.length);
 
+  const showToast = () => {
+    Toast.show({
+      type: 'success',
+      text1: 'Hello',
+      text2: 'This is some something 👋'
+    });
+  }
+
   return (
       <Container>
 
@@ -93,7 +104,7 @@ export default function HomeScreen() {
                     <Icon source="pen" color={MD3Colors.primary50} size={20}/>
                 </DataTable.Cell>
 
-                <DataTable.Cell onPress={() => storkItmeServices.remove(item.id)} style={styles.DataTableCenterCell}>
+                <DataTable.Cell onPress={() => showToast()} style={styles.DataTableCenterCell}>
                     <Icon source="delete" color={MD3Colors.error50} size={20}/>
                 </DataTable.Cell>
 
