@@ -1,14 +1,17 @@
 // App.js
 import React, { useState } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { View,TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View,TextInput,StyleSheet } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
-import { DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-paper';
+import { DataTable, Text,Icon,MD3Colors,Divider,Button  } from 'react-native-paper';
+import { useFocusEffect} from '@react-navigation/native';
+import Container from '@/components/Container'
 import GetRightLoginServices from '@/services/GetRightServices';
+import useChoosePopup from "@/components/ChoosePopup";
 import LoginList from '@/model/LoginList';
 
 const  App = () => {
-
+    const [ChoosePopup, showPopup] = useChoosePopup();
     const colorScheme = useColorScheme();
 
     const textColor = colorScheme === 'dark' ? "#fff" : "#000"
@@ -28,9 +31,16 @@ const  App = () => {
 
     const getRightLoginServices = React.useRef(new GetRightLoginServices()).current;
     const [LoginList, setLoginList] = React.useState<LoginList[]>([]);
-    getRightLoginServices.GetLoginList().then(result => {
-        setLoginList(result);
-    })
+
+    useFocusEffect(
+        React.useCallback(() => {
+        // Function to run when HomeScreen is focused 
+        getRightLoginServices.GetLoginList().then(result => {
+            setLoginList(result);
+        })
+    
+        }, []) // Empty dependency array ensures this runs when the screen is focused
+    );
 
 
     React.useEffect(() => {
@@ -50,25 +60,47 @@ const  App = () => {
 
             let returnInfoFromWebServer = getRightLoginServices.Login(username,password,getRightLoginServices.apiUrls[selectedApi])
 
-            Alert.alert((await returnInfoFromWebServer).text);
+           // Alert.alert((await returnInfoFromWebServer).text);
 
         } catch (error) {
         console.error('Error:', error);
-        Alert.alert('An error occurred');
+        //Alert.alert('An error occurred');
         }
     };
 
     const handleLogud = async(id:string) =>{
 
-       let idSaveOnStorage = getRightLoginServices.apiUrls.find(x => x.idSaveOnStorage == id)
-
-       if (idSaveOnStorage != undefined)
-        getRightLoginServices.Logud(idSaveOnStorage)
-
+        let idSaveOnStorage = getRightLoginServices.apiUrls.find(x => x.idSaveOnStorage == id)
+ 
+        if (idSaveOnStorage != undefined)
+         getRightLoginServices.Logud(idSaveOnStorage)
+ 
     }
 
+    const LogudShowPopup = (id:string) => {
+
+    
+        showPopup({
+            titel: "Logud Confirmation",
+            text: "Are you sure you want to Logud?",
+            okBtnText: "Logud",
+            noBtnText: "Cancel",
+            okBtnColor: "#FF0000",
+            noBtnColor:"#fff",
+            okBtnFun: () => {
+                handleLogud(id)
+            },
+           // noBtnFun: () => {console.log("Action canceled!")},
+        });
+    
+    };
+
+    
+
+
+
   return (
-    <View style={styles.container}>
+    <Container>
         <Text style={styles.title}>Login</Text>
 
 
@@ -98,7 +130,10 @@ const  App = () => {
             secureTextEntry
             onChangeText={setPassword}
         />
-        <Button title="Login" onPress={handleLogin} />
+
+        <Button mode="outlined"  onPress={() => handleLogin()}>
+            <Text>Login</Text>
+        </Button>
 
 
         <View>
@@ -108,7 +143,7 @@ const  App = () => {
 
                 <DataTable.Header>
                     <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}>Name</DataTable.Title>
-                    <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}></DataTable.Title>
+                    <DataTable.Title style={styles.DataTableCenterTitle} textStyle={{color:textColor}}>log ud</DataTable.Title>
                 
                 </DataTable.Header>
 
@@ -117,7 +152,7 @@ const  App = () => {
                 {LoginList.slice(from, to).map((item) => (
                     <DataTable.Row key={item.id} >
                         <DataTable.Cell style={styles.DataTableCenterCell} textStyle={{color:textColor}}>{item.name}</DataTable.Cell>
-                        <DataTable.Cell onPress={() => handleLogud(item.id)} style={styles.DataTableCenterCell}>
+                        <DataTable.Cell onPress={() => LogudShowPopup(item.id)} style={styles.DataTableCenterCell}>
                             <Text style={{color:MD3Colors.error50}}>log ud</Text>
 
                         </DataTable.Cell>
@@ -147,14 +182,14 @@ const  App = () => {
 
             </DataTable>
 
-
+           
 
 
         </View>
 
+         <ChoosePopup />
 
-
-    </View>
+    </Container>
   );
 };
 
