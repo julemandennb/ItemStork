@@ -227,6 +227,27 @@ export default class GetRightServices{
 
     //#endregion
 
+    //#region Delete
+
+        public async DeleteStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
+        {
+            let apiUrl = this.GetRightApiUrls(storkItme.from)
+            if(apiUrl != null)
+                {
+
+                    switch(apiUrl?.serverToUser)
+                    {
+                        case "api":
+                            return await new ApiServices().DeleteStorkItme(apiUrl,storkItme)
+                        default:
+                            break;
+                    }
+                }
+                return new ReturnInfoFromWebServer("cannot find right server",true);
+
+        }
+
+    //#endregion
 
     //#region private
 

@@ -30,20 +30,15 @@ export default class StorkItmeServices{
         this.addOneToList(storkItme);
     }
 
-    public remove(id:number)
+    public remove(item: StorkItme)
     {
-        /*this.AddSetting.forEach(Setting => {
-            switch(Setting)
-            {
-                case "local":
-                    this.storkItmes = this.storkItmes.filter(x => x.id != id)
-                    break;
-                default:
-                    break;
-            }
-        })*/
+        new GetRightServices().DeleteStorkItme(item).then(x =>{
 
-        this.updateCallback(this.storkItmes);
+            let itmes = this.storkItmes.filter(x => x != item)
+            this.storkItmes = itmes
+    
+            this.updateCallback(this.storkItmes);
+        });
     }
 
     public get(id:number): StorkItme | undefined

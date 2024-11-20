@@ -2,20 +2,24 @@ import { StyleSheet} from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import * as React from 'react';
 import { DataTable, Text,Icon,MD3Colors,Divider  } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
+import { useFocusEffect} from '@react-navigation/native';
 
 import Container from '@/components/Container'
-import StorkItme from '@/model/StorkItme';
 import AddNewStorkItmeView from "@/components/AddNewStorkItmeView"
-import StorkItmeServices from "@/services/StorkItmeServices"
-import { useFocusEffect} from '@react-navigation/native';
-import UsergroupServices from '@/services/UsergroupServices';
-import Usergroup from '@/model/Usergroup';
+import useChoosePopup from "@/components/ChoosePopup";
 
-import Toast from 'react-native-toast-message';
+import StorkItmeServices from "@/services/StorkItmeServices"
+import UsergroupServices from '@/services/UsergroupServices';
+
+import Usergroup from '@/model/Usergroup';
+import StorkItme from '@/model/StorkItme';
+
+
 
 
 export default function HomeScreen() {
-
+  const [ChoosePopup, showPopup] = useChoosePopup();
   const colorScheme = useColorScheme();
 
 
@@ -37,6 +41,23 @@ export default function HomeScreen() {
 
   const newStorkItme = AddNewStorkItmeView(storkItmeServices,usergroupServices)
 
+  const DeleteShowPopup = (item:StorkItme) => {
+
+    
+    showPopup({
+        titel: "Delete Confirmation",
+        text: "Are you sure you want to delete this item?",
+        okBtnText: "Delete",
+        noBtnText: "Cancel",
+        okBtnColor: "#FF0000",
+        noBtnColor:"#fff",
+        okBtnFun: () => {
+          storkItmeServices.remove(item)
+        },
+       // noBtnFun: () => {console.log("Action canceled!")},
+    });
+
+  };
 
   React.useEffect(() => {
     // Register the callback to update the state when new items are added
@@ -104,7 +125,7 @@ export default function HomeScreen() {
                     <Icon source="pen" color={MD3Colors.primary50} size={20}/>
                 </DataTable.Cell>
 
-                <DataTable.Cell onPress={() => showToast()} style={styles.DataTableCenterCell}>
+                <DataTable.Cell onPress={() => DeleteShowPopup(item)} style={styles.DataTableCenterCell}>
                     <Icon source="delete" color={MD3Colors.error50} size={20}/>
                 </DataTable.Cell>
 
@@ -137,7 +158,7 @@ export default function HomeScreen() {
 
           </DataTable>
 
-        
+          <ChoosePopup />
 
         {newStorkItme.btn()}
 

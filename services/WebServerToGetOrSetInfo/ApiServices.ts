@@ -100,7 +100,7 @@ export default class ApiServices {
     //#endregion
 
     //#region StorkItems
-        public async GetAllStorkItems(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer | undefined> {
+        public async GetAllStorkItems(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer> {
             try {
                 const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
                 if (tokenLoginStr) {
@@ -208,7 +208,6 @@ export default class ApiServices {
 
         }
 
-
         public async UpdataStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             try {
@@ -262,6 +261,49 @@ export default class ApiServices {
                 return new ReturnInfoFromWebServer('An error occurred while try to updata stork items', true);
             }
 
+        }
+
+        public async DeleteStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
+        {
+            try {
+                const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
+                if (tokenLoginStr) {
+                    const tokenLogin: TokenLogin = JSON.parse(tokenLoginStr);
+
+                    const response = await fetch(publicUrlServer.url + "/storkitme/Delete?id=" + StorkItme.id, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': "*/*",
+                            'Content-Type':"application/json",
+                            'Authorization': 'Bearer ' + tokenLogin.accessToken,
+                        },
+                    });
+
+                    if (response.ok) {
+
+                        return new ReturnInfoFromWebServer('delete stork items', false);
+
+                    }
+                    else
+                    {
+                        if (!this.loginError && response.status == 401) {
+                            const isTokenRefreshed = await this.HandleLoginError(publicUrlServer);
+                            if (isTokenRefreshed) {
+                                return this.UpdataStorkItme(publicUrlServer, StorkItme);
+                            }
+                        }
+                        return new ReturnInfoFromWebServer('Failed to delete stork items', true);
+
+                    }
+
+                }else {
+                    return new ReturnInfoFromWebServer('User is not logged in', true);
+                }
+            }
+            catch (error) {
+                console.error('Get stork items error:', error);
+                return new ReturnInfoFromWebServer('An error occurred while try to updata stork items', true);
+            }
         }
 
     //#endregion
