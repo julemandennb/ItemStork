@@ -27,11 +27,11 @@ export default class GetRightServices{
     //#region User Setting
 
         /**
-     * Authenticates a user with username and password.
-     * @param username - The username of the user.
-     * @param password - The password of the user.
-     * @returns A promise that resolves to a login token or an error message.
-     */
+         * Authenticates a user with username and password.
+         * @param username - The username of the user.
+         * @param password - The password of the user.
+         * @returns A promise that resolves to a login token or an error message.
+         */
         public async Login(username:string,password:string,apiUrl:PublicUrlServer): Promise<ReturnInfoFromWebServer>
         {
 
@@ -184,6 +184,11 @@ export default class GetRightServices{
 
     //#region updata
 
+        /**
+         * find right right server to send Updata StorkItme to
+         * @param storkItme storkItme to updata
+         * @returns info
+         */
         public async UpdataStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             let apiUrl = this.GetRightApiUrls(storkItme.from)
@@ -229,6 +234,11 @@ export default class GetRightServices{
 
     //#region Delete
 
+        /**
+         * find right server to delete storkItme from
+         * @param storkItme storkItme to delete
+         * @returns info
+         */
         public async DeleteStorkItme(storkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             let apiUrl = this.GetRightApiUrls(storkItme.from)
@@ -290,6 +300,11 @@ export default class GetRightServices{
 
         }
 
+        /**
+         * find right server info
+         * @param id id on server info to return
+         * @returns info to server
+         */
         private GetRightApiUrls(id:string)
         {
             return this.apiUrls.find(x => x.idSaveOnStorage == id)

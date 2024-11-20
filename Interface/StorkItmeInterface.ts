@@ -1,5 +1,7 @@
 import UsergroupInterface from "@/Interface/UsergroupInterface"
-
+/**
+ * data get from response is StorkItme
+ */
 export default interface StorkItmeInterface {
 
         id: number;

@@ -1,3 +1,6 @@
+/**
+ * to make env EXPO_PUBLIC_URL_SERVER to a model
+ */
 export default class PublicUrlServer{
 
     displayName:string

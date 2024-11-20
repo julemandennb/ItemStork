@@ -1,3 +1,6 @@
+/**
+ * hold itme to show server user is login to
+ */
 export default class LoginList{
 
     name:string

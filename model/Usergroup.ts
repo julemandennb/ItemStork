@@ -1,3 +1,6 @@
+/**
+ * make Usergroup model to hold info 
+ */
 export default class Usergroup{
 
     id:number

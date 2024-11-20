@@ -11,25 +11,50 @@ export default class StorkItmeServices{
     public constructor()
     {
         this.storkItmes = [];
-        //this.getListFromApi()
     }
 
+    /**
+     * to set updateCallback
+     * @param callback fun to call
+     */
     public onUpdate(callback: (items: StorkItme[]) => void) {
         this.updateCallback = callback;
     }
     
-
+    /**
+     * get list of storkItme
+     * @returns list of StorkItme
+     */
     public GetStorkItmes(): StorkItme[]
     {
         return this.storkItmes;
     }
 
+    /**
+     * to make a new StorkItme
+     * @param name name on this
+     * @param description description on this 
+     * @param type type on this
+     * @param date best before 
+     * @param stork how many in stork
+     * @param userGroup will the userGroup it belongs to
+     * @param imgurl url to img (this fun is not make)
+     */
     public create (name: string,description:string,type:string, date:Date,stork: number,userGroup:Usergroup,imgurl:string = "")
     {
         let storkItme = new StorkItme(0,name,description,type,stork,date,imgurl,userGroup.id,userGroup.from);
-        this.addOneToList(storkItme);
+        new GetRightServices().CreateStorkitme(storkItme).then(x => {
+           
+            if(!x.error)
+                this.getListFromApi()
+           
+        })
     }
 
+    /**
+     * to remove StorkItme 
+     * @param item StorkItme to remove
+     */
     public remove(item: StorkItme)
     {
         new GetRightServices().DeleteStorkItme(item).then(x =>{
@@ -41,11 +66,21 @@ export default class StorkItmeServices{
         });
     }
 
-    public get(id:number): StorkItme | undefined
+    /**
+     * get right StorkItme
+     * @param id id on this
+     * @param from server this is from
+     * @returns StorkItme
+     */
+    public get(id:number, from:string): StorkItme | undefined
     {
-        return this.storkItmes.find(x => x.id === id)
+        return this.storkItmes.find(x => x.id === id && x.from == from)
     }
 
+    /**
+     * to updata StorkItme
+     * @param storkItme StorkItme to updata
+     */
     public updata(storkItme: StorkItme)
     {
         new GetRightServices().UpdataStorkItme(storkItme).then(x =>{
@@ -57,11 +92,17 @@ export default class StorkItmeServices{
         })
     }
 
+    /**
+     * this fun updata list of StorkItme
+     */
     public UpdataListAfterLogin()
     {
         this.getListFromApi();
     }
 
+    /**
+     * get all storkItmes from server
+     */
     private getListFromApi()
     {
         this.storkItmes = []
@@ -73,31 +114,4 @@ export default class StorkItmeServices{
             this.updateCallback(this.storkItmes);
         })
     }
-
-    private addOneToList(storkItme:StorkItme)
-    {
-        new GetRightServices().CreateStorkitme(storkItme).then(x => {
-           
-            if(!x.error)
-                this.getListFromApi()
-           
-        })
-    }
-
-    private addManyToList(storkItems:StorkItme[])
-    {
-       /* this.AddSetting.forEach(Setting => {
-            switch(Setting)
-            {
-                case "local":
-                    this.setIDAndAddToList(storkItems)
-                    break
-                default:
-                    break
-            }
-        });
-*/
-        this.updateCallback(this.storkItmes);
-    }
-
 }

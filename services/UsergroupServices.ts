@@ -9,23 +9,36 @@ export default class UsergroupServices{
     public constructor()
     {
         this.usergroup = [];
-        //this.getListFromApi()
     }
 
+    /**
+    * to set updateCallback
+    * @param callback fun to call
+    */
     public onUpdate(callback: (items: Usergroup[]) => void) {
         this.updateCallback = callback;
     }
 
+    /**
+     * to get list of usergroup
+     * @returns list of usergroup
+     */
     public GetUsergroups(): Usergroup[]
     {
         return this.usergroup;
     }
 
+    /**
+     * call to updata list of usergroup
+     */
     public UpdataListAfterLogin()
     {
         this.getListFromApi();
     }
 
+    /**
+     * get all usergroup from all server
+     */
     private getListFromApi()
     {
         this.usergroup = []

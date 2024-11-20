@@ -1,3 +1,6 @@
+/**
+ * hold login Token to call server 
+ */
 export default class TokenLogin{
 
     public TokenType:string

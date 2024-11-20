@@ -1,3 +1,6 @@
+/**
+ * retune model holde text info, if this fun get error and data from fun
+ */
 export default class ReturnInfoFromWebServer{
 
     text:string

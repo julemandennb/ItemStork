@@ -57,6 +57,13 @@ export default class ApiServices {
     }
 
     //#region User Setting
+
+        /**
+         * To Login 
+         * @param body hold info to login
+         * @param publicUrlServer setting to url
+         * @returns info text
+         */
         public async login(body: string, publicUrlServer: PublicUrlServer): Promise<ReturnInfoFromWebServer> {
             try {
                 const response = await fetch(publicUrlServer.url + "/login", {
@@ -87,6 +94,12 @@ export default class ApiServices {
             }
         }
 
+        /**
+         * to logout
+         * @param publicUrlServer info to sendt
+         * 
+         * @returns info text
+         */
         public async logout(publicUrlServer: PublicUrlServer): Promise<boolean> {
             try {
                 await this.StorageService.RemoveItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
@@ -100,6 +113,13 @@ export default class ApiServices {
     //#endregion
 
     //#region StorkItems
+
+        /**
+         * get all StorkItems
+         * @param publicUrlServer url to call to
+         * @param getAllStorkItems if user is admin or Manager can get all item Stork
+         * @returns info and data
+         */
         public async GetAllStorkItems(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer> {
             try {
                 const tokenLoginStr = await this.StorageService.GetItemFromStorage(publicUrlServer.idSaveOnStorage + "Login");
@@ -153,6 +173,12 @@ export default class ApiServices {
             }
         }
 
+        /**
+         * make a Stork Item 
+         * @param publicUrlServer server info 
+         * @param StorkItme Stork Item to save to
+         * @returns info 
+         */
         public async CreateStorkItems(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             try {
@@ -208,6 +234,12 @@ export default class ApiServices {
 
         }
 
+        /**
+         * to updata Stork Item 
+         * @param publicUrlServer info to server 
+         * @param StorkItme Stork Item to updata and new itme to updata
+         * @returns info 
+         */
         public async UpdataStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             try {
@@ -263,6 +295,12 @@ export default class ApiServices {
 
         }
 
+        /**
+         * to delete Stork Item 
+         * @param publicUrlServer info to server 
+         * @param StorkItme Stork Item to delete
+         * @returns info
+         */
         public async DeleteStorkItme(publicUrlServer: PublicUrlServer,StorkItme:StorkItme): Promise<ReturnInfoFromWebServer>
         {
             try {
@@ -310,7 +348,13 @@ export default class ApiServices {
 
     //#region Usergroup
 
-        public async GetAllUsergroup(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer | undefined>
+        /**
+         * to get all Usergroup
+         * @param publicUrlServer info to server
+         * @param getAllStorkItems if user is admin or Manager can get all Usergroup
+         * @returns info and data
+         */
+        public async GetAllUsergroup(publicUrlServer: PublicUrlServer, getAllStorkItems: boolean = false): Promise<ReturnInfoFromWebServer>
         {
             try
             {
